@@ -1,4 +1,4 @@
-# 🍕 Pizzería Mamma Mia — Hito 3 (Renderización dinámica de componentes)
+# 🍕 Pizzería Mamma Mia — Hito 4 (Consumo de APIs con React)
 
 ## 🍕 Stack
 
@@ -7,32 +7,27 @@
 * React-Bootstrap + Bootstrap
 * Context API (Auth + Cart)
 * Persistencia en localStorage (auth y carrito)
+* Backend Express (API de pizzas en `http://localhost:5000/api`)
 
 ---
 
 ## 🍕 Objetivo del Hito
 
-Implementar renderización dinámica de componentes usando un array de pizzas y simular un carrito de compras:
+Implementar el **consumo de una API externa** para mostrar la información de pizzas:
 
-* ✔️ Home renderiza 6 tarjetas desde `src/data/pizzas.js`
-* ✔️ `CardPizza` recibe props y lista ingredientes con `<li>`
-* ✔️ `Cart` muestra ítems, permite sumar/restar cantidades y calcula el total
-* ✔️ (Extra) `Navbar` muestra el total en vivo del carrito
-* ✔️ (Extra) Mantiene Login/Register/Profile del hito anterior con rutas
+* ✔️ **Home.jsx**: consumir `GET http://localhost:5000/api/pizzas` y renderizar tarjetas dinámicamente.
+* ✔️ **Pizza.jsx**: consumir `GET http://localhost:5000/api/pizzas/p001` y renderizar detalle de una pizza fija.
+* ✔️ Uso de `useEffect` + `fetch` en ambos componentes.
+* ✔️ Mostrar en cada pizza: nombre, precio, ingredientes, imagen y descripción.
 
 ---
 
-## 🍕 Rutas
+## 🍕 Vistas
 
-| Ruta        | Página       | Protección | Descripción                                                              |
-| ----------- | ------------ | ---------- | ------------------------------------------------------------------------ |
-| `/`         | Home         | Pública    | Header + 6 cards renderizadas desde pizzas.js                            |
-| `/cart`     | Cart         | Pública    | Carrito con imagen, nombre, precio, + / −, eliminación implícita y total |
-| `/register` | RegisterPage | Pública    | Registro con validaciones controladas                                    |
-| `/login`    | LoginPage    | Pública    | Login con feedback y redirección                                         |
-| `/profile`  | Profile      | Protegida  | Solo autenticados (vía ProtectedRoute)                                   |
-
-**ProtectedRoute** redirige a `/login` y conserva `state.from` para volver a la ruta original tras autenticarse.
+| Vista | Endpoint consumido     | Descripción                                                                  |
+| ----- | ---------------------- | ---------------------------------------------------------------------------- |
+| Home  | `GET /api/pizzas`      | Lista todas las pizzas en tarjetas dinámicas.                                |
+| Pizza | `GET /api/pizzas/p001` | Muestra detalle de una pizza (nombre, precio, descripción, ingredientes...). |
 
 ---
 
@@ -49,19 +44,20 @@ Implementar renderización dinámica de componentes usando un array de pizzas y 
     │   ├── Cart.jsx
     │   ├── Footer.jsx
     │   ├── Header.jsx
-    │   ├── Home.jsx
+    │   ├── Home.jsx          ← consume /api/pizzas
     │   ├── LoginPage.jsx
     │   ├── Navbar.jsx
+    │   ├── Pizza.jsx         ← consume /api/pizzas/p001
     │   ├── Profile.jsx
     │   └── RegisterPage.jsx
     ├── context/
     │   ├── AuthContext.jsx
-    │   └── CartContext.jsx   ← carrito global + total dinámico
+    │   └── CartContext.jsx
     ├── data/
-    │   └── pizzas.js         ← 6 pizzas (id, name, price, ingredients, img)
+    │   └── pizzas.js         ← mantenido para referencia / pruebas
     ├── routes/
     │   └── ProtectedRoute.jsx
-    ├── App.jsx
+    ├── App.jsx               ← renderiza Home o Pizza según se quiera ver
     └── main.jsx
 ```
 
@@ -71,44 +67,45 @@ Implementar renderización dinámica de componentes usando un array de pizzas y 
 
 ### Home.jsx
 
-* Importa pizzas desde `src/data/pizzas.js`.
-* Renderiza 6 `<CardPizza />` con `.map()` y `key={pz.id}`.
+* `useEffect` para cargar pizzas con fetch.
+* Renderiza lista de `<CardPizza />` dinámicamente.
+
+### Pizza.jsx
+
+* `useEffect` para cargar pizza fija `p001`.
+* Renderiza tarjeta con nombre, precio, descripción e ingredientes.
 
 ### CardPizza.jsx
 
-* Recibe `id, name, price, ingredients, img` por props.
-* Lista ingredientes:
+* Recibe props `id, name, price, ingredients, img`.
+* Lista ingredientes con `.map()`.
 
-```jsx
-<ul>{ingredients.map(ing => <li key={ing}>{ing}</li>)}</ul>
+---
+
+## 🚀 Instrucciones de ejecución
+
+### Backend
+
+```bash
+cd simple-api-backend-nodejs-express-fs-json-jwt-main
+npm install
+npm start
 ```
 
-* Botón Añadir: `onClick={() => add({ id, name, price, img })}` (usa `CartContext`).
+API disponible en: `http://localhost:5000/api/pizzas`
 
-### Cart.jsx
+### Frontend
 
-* Consume `{ cart, inc, dec, total }` de `CartContext`.
-* Muestra imagen, nombre, precio y controles `+ / −`.
-* Si la cantidad llega a 0, el ítem se elimina.
-* Calcula y muestra Total (`CLP` con `toLocaleString('es-CL')`).
-
-### Navbar.jsx
-
-* Enlace a `/cart` y total del carrito en vivo:
-
-```jsx
-const { total } = useCart();
-🛒 Total: ${formatCLP(total)}
+```bash
+cd hito-4-mamma-mia
+npm install
+npm run dev
 ```
 
-### AuthContext.jsx
-
-* Maneja login / logout y persiste el estado en `localStorage`.
-* `Profile` muestra el email del usuario autenticado.
+App disponible en: `http://localhost:XXXX`
 
 ---
 
 ## 🍕 Live Preview 🍕
 
-
-
+*(Cuando se despliegue en GitHub Pages, quedará disponible con base `/PizzeriaMM_4_Consumo_de_APIs/`)*
