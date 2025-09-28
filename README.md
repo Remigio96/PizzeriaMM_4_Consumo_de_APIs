@@ -1,4 +1,5 @@
 # 🍕 Pizzería Mamma Mia — Hito 4 (Consumo de APIs con React)
+<img width="912" height="582" alt="image" src="https://github.com/user-attachments/assets/ab28a661-0255-4b64-a67d-5d64c755f45d" />
 
 ## 🍕 Stack
 
