@@ -107,5 +107,7 @@ App disponible en: `http://localhost:XXXX`
 ---
 
 ## 🍕 Live Preview 🍕
+<img width="1003" height="845" alt="image" src="https://github.com/user-attachments/assets/a9b9982b-533e-476f-8550-52961859cd37" />
+https://remigio96.github.io/PizzeriaMM_4_Consumo_de_APIs/
 
 *(Cuando se despliegue en GitHub Pages, quedará disponible con base `/PizzeriaMM_4_Consumo_de_APIs/`)*
